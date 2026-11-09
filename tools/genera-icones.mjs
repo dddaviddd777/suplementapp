@@ -3,9 +3,15 @@ import { deflateSync } from 'node:zlib';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-const VERD = [31, 122, 90];
+// Degradat fúcsia (dalt a l'esquerra) → magenta fosc (baix a la dreta)
+const FUCSIA = [255, 46, 147];
+const FOSC = [74, 8, 56];
+const fons = (x, y) => {
+  const t = Math.min(Math.max((x + y) / 2, 0), 1);
+  return FUCSIA.map((c, i) => Math.round(c + (FOSC[i] - c) * t));
+};
 const BLANC = [255, 255, 255];
-const MENTA = [176, 232, 202];
+const ROSA = [255, 182, 220];
 
 const CRC = new Uint32Array(256).map((_, n) => {
   let c = n;
@@ -50,10 +56,10 @@ function mostra(x, y, maskable) {
   const v = -cx * a + cy * a;  // eix curt
   const L = 0.2, R = 0.13;
   const du = Math.max(Math.abs(u) - L, 0);
-  if (du * du + v * v <= R * R) return [...(u < 0 ? BLANC : MENTA), 255];
+  if (du * du + v * v <= R * R) return [...(u < 0 ? BLANC : ROSA), 255];
   // Contorn fi al voltant de la càpsula
   if (du * du + v * v <= (R + 0.025) * (R + 0.025)) return [...BLANC, 255];
-  return [...VERD, 255];
+  return [...fons(x, y), 255];
 }
 
 function icona(mida, maskable) {

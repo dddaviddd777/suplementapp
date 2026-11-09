@@ -5,17 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>SuplementAPP</title>
   <meta name="description" content="Recomanacions orientatives de suplementació segons el teu perfil, la teva dieta i l'esport que fas.">
-  <meta name="theme-color" content="#1f7a5a">
+  <meta name="theme-color" content="#1c0617">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&display=swap">
   <link rel="stylesheet" href="css/styles.css">
   <script type="module" src="js/app.js"></script>
 </head>
 <body>
   <header class="barra">
     <div class="barra-dins">
-      <h1>SuplementAPP</h1>
+      <h1 class="logo"><span data-pill></span><span class="logo-text">Suplement<b>APP</b></span></h1>
       <span id="pas-indicador" class="pas-indicador"></span>
     </div>
     <div class="progres" id="progres"><div id="progres-ple"></div></div>
@@ -25,7 +28,12 @@
     <form id="form" novalidate>
       <!-- MODE -->
       <section class="pas" data-mode="tots" data-titol="Inici">
-        <h2>Com vols fer-ho?</h2>
+        <div class="benvinguda" data-nomes-onboarding>
+          <span data-pill></span>
+          <h2>El teu pla de suplements, <span>fet a mida</span></h2>
+          <p class="ajuda">Respon unes preguntes sobre tu, el teu esport i el que menges, i et direm què prendre, quant i a quina hora.</p>
+        </div>
+        <h3>Com vols fer-ho?</h3>
         <p class="ajuda">Les dades es guarden només en aquest dispositiu. Pots canviar de mode quan vulguis.</p>
         <div class="opcions vertical modes">
           <label class="opcio"><input type="radio" name="mode" value="rapid" checked>
@@ -277,6 +285,25 @@
     </form>
 
     <section id="resultats" hidden aria-live="polite"></section>
+    <section id="perfil" hidden></section>
   </main>
+
+  <nav class="nav-app" id="nav-app" hidden aria-label="Navegació principal">
+    <div class="nav-app-dins">
+      <button type="button" data-vista="pla">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><g transform="rotate(45 32 32)"><rect x="7" y="21" width="50" height="22" rx="11" fill="none" stroke="currentColor" stroke-width="4"/><path d="M32 21h14a11 11 0 0 1 0 22H32z" fill="currentColor"/></g></svg>
+        El meu pla
+      </button>
+      <button type="button" data-accio="pdf">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+        PDF
+      </button>
+      <button type="button" data-vista="perfil">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+        Perfil
+      </button>
+    </div>
+  </nav>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
