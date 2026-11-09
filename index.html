@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>SuplementAPP</title>
+  <meta name="description" content="Recomanacions orientatives de suplementació segons el teu perfil, la teva dieta i l'esport que fas.">
+  <meta name="theme-color" content="#1f7a5a">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <header class="barra">
+    <div class="barra-dins">
+      <h1>SuplementAPP</h1>
+      <span id="pas-indicador" class="pas-indicador"></span>
+    </div>
+    <div class="progres" id="progres"><div id="progres-ple"></div></div>
+  </header>
+
+  <main>
+    <form id="form" novalidate>
+      <!-- MODE -->
+      <section class="pas" data-mode="tots" data-titol="Inici">
+        <h2>Com vols fer-ho?</h2>
+        <p class="ajuda">Les dades es guarden només en aquest dispositiu. Pots canviar de mode quan vulguis.</p>
+        <div class="opcions vertical modes">
+          <label class="opcio"><input type="radio" name="mode" value="rapid" checked>
+            <span><strong>Ràpid · 2 minuts</strong><small>Perfil, esport, 3 preguntes de dieta i horaris. La dieta s'estima de manera aproximada.</small></span></label>
+          <label class="opcio"><input type="radio" name="mode" value="detallat">
+            <span><strong>Detallat · 8–10 minuts</strong><small>Qüestionari complet de dieta, suplements que ja prens, medicació i analítica. Dosis molt més ajustades.</small></span></label>
+        </div>
+        <p class="error" hidden></p>
+      </section>
+
+      <!-- PERFIL -->
+      <section class="pas" data-mode="tots" data-titol="Perfil" hidden>
+        <h2>El teu perfil</h2>
+        <fieldset>
+          <legend>Sexe</legend>
+          <div class="opcions">
+            <label class="opcio"><input type="radio" name="sexe" value="home"><span>Home</span></label>
+            <label class="opcio"><input type="radio" name="sexe" value="dona"><span>Dona</span></label>
+          </div>
+        </fieldset>
+
+        <div class="camps">
+          <label class="camp"><span>Edat <small>anys</small></span>
+            <input type="number" name="edat" min="18" max="100" inputmode="numeric" placeholder="40"></label>
+          <label class="camp"><span>Alçada <small>cm</small></span>
+            <input type="number" name="alcada" min="120" max="230" inputmode="numeric" placeholder="175"></label>
+          <label class="camp"><span>Pes <small>kg</small></span>
+            <input type="number" name="pes" min="30" max="250" step="0.1" inputmode="decimal" placeholder="72"></label>
+        </div>
+
+        <div data-nomes="detallat" class="bloc">
+          <p class="ajuda">Opcional: si els saps, afinen el càlcul de la proteïna.</p>
+          <div class="camps dos">
+            <label class="camp"><span>% de greix <small>opcional</small></span>
+              <input type="number" name="greix" min="3" max="60" step="0.1" inputmode="decimal" placeholder="—"></label>
+            <label class="camp"><span>Cintura <small>cm, opcional</small></span>
+              <input type="number" name="cintura" min="50" max="200" inputmode="numeric" placeholder="—"></label>
+          </div>
+        </div>
+
+        <fieldset data-sexe="dona" class="bloc">
+          <legend>Cicle menstrual</legend>
+          <div class="opcions vertical">
+            <label class="opcio"><input type="radio" name="estatHormonal" value="regular" checked><span>Menstruació regular</span></label>
+            <label class="opcio"><input type="radio" name="estatHormonal" value="abundant"><span>Menstruacions abundants</span></label>
+            <label class="opcio"><input type="radio" name="estatHormonal" value="menopausa"><span>Menopausa</span></label>
+            <label class="opcio"><input type="radio" name="estatHormonal" value="cap"><span>No tinc la regla per altres motius</span></label>
+          </div>
+        </fieldset>
+        <p class="error" hidden></p>
+      </section>
+
+      <!-- ACTIVITAT -->
+      <section class="pas" data-mode="tots" data-titol="Activitat" hidden>
+        <h2>La teva activitat</h2>
+        <fieldset>
+          <legend>Com és el teu dia a dia (feina o estudis)?</legend>
+          <div class="opcions vertical">
+            <label class="opcio"><input type="radio" name="feina" value="sedentaria" checked><span>Assegut la major part del dia</span></label>
+            <label class="opcio"><input type="radio" name="feina" value="activa"><span>De peu o caminant sovint</span></label>
+            <label class="opcio"><input type="radio" name="feina" value="fisica"><span>Feina física (càrrega, obra, camp…)</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Quins esports o activitats fas habitualment?</legend>
+          <p class="ajuda">Marca'ls tots i indica'n la freqüència. Si no en fas cap, deixa-ho en blanc.</p>
+          <div id="esports" class="esports"></div>
+        </fieldset>
+
+        <label class="camp hora-entreno"><span>A quina hora entrenes normalment? <small>deixa-ho en blanc si varia molt</small></span>
+          <input type="time" name="h-entreno" value="19:00"></label>
+        <p class="error" hidden></p>
+      </section>
+
+      <!-- OBJECTIU I DIETA -->
+      <section class="pas" data-mode="tots" data-titol="Objectiu i dieta" hidden>
+        <h2>Objectiu i alimentació</h2>
+        <fieldset>
+          <legend>Quin és el teu objectiu principal?</legend>
+          <div class="opcions graella">
+            <label class="opcio"><input type="radio" name="objectiu" value="salut" checked><span>Salut general</span></label>
+            <label class="opcio"><input type="radio" name="objectiu" value="muscul"><span>Guanyar múscul</span></label>
+            <label class="opcio"><input type="radio" name="objectiu" value="greix"><span>Perdre greix</span></label>
+            <label class="opcio"><input type="radio" name="objectiu" value="rendiment"><span>Rendiment esportiu</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Tipus de dieta</legend>
+          <div class="opcions">
+            <label class="opcio"><input type="radio" name="dieta" value="omnivora" checked><span>Menjo de tot</span></label>
+            <label class="opcio"><input type="radio" name="dieta" value="vegetariana"><span>Vegetariana</span></label>
+            <label class="opcio"><input type="radio" name="dieta" value="vegana"><span>Vegana</span></label>
+          </div>
+        </fieldset>
+
+        <div data-nomes="rapid">
+          <fieldset id="camp-peix">
+            <legend>Quantes vegades per setmana menges peix blau (sardina, salmó, verat…)?</legend>
+            <div class="opcions">
+              <label class="opcio"><input type="radio" name="peixBlau" value="0"><span>Gairebé mai</span></label>
+              <label class="opcio"><input type="radio" name="peixBlau" value="1" checked><span>1 cop</span></label>
+              <label class="opcio"><input type="radio" name="peixBlau" value="2"><span>2 o més</span></label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Racions al dia de làctics o begudes vegetals enriquides amb calci</legend>
+            <div class="opcions">
+              <label class="opcio"><input type="radio" name="lactis" value="1"><span>0–1</span></label>
+              <label class="opcio"><input type="radio" name="lactis" value="2" checked><span>2</span></label>
+              <label class="opcio"><input type="radio" name="lactis" value="3"><span>3 o més</span></label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Fruits secs, llegums o cereals integrals</legend>
+            <div class="opcions">
+              <label class="opcio"><input type="radio" name="fruitsSecs" value="poc"><span>Menys de 3 cops/setmana</span></label>
+              <label class="opcio"><input type="radio" name="fruitsSecs" value="sovint" checked><span>Gairebé cada dia</span></label>
+            </div>
+          </fieldset>
+        </div>
+
+        <fieldset data-nomes="detallat">
+          <legend>Intoleràncies o al·lèrgies</legend>
+          <div id="restriccions"></div>
+        </fieldset>
+        <p class="error" hidden></p>
+      </section>
+
+      <!-- DIETA DETALLADA -->
+      <section class="pas" data-mode="detallat" data-titol="Què menges" hidden>
+        <h2>Què menges habitualment</h2>
+        <p class="ajuda">Pensa en una setmana normal. No cal ser exacte: amb una aproximació n'hi ha prou.</p>
+        <div id="ffq"></div>
+        <fieldset>
+          <legend>El pa, la pasta i l'arròs que menges són…</legend>
+          <div class="opcions">
+            <label class="opcio"><input type="radio" name="ffq-cerealsTipus" value="refinats"><span>Blancs</span></label>
+            <label class="opcio"><input type="radio" name="ffq-cerealsTipus" value="mixt" checked><span>Meitat i meitat</span></label>
+            <label class="opcio"><input type="radio" name="ffq-cerealsTipus" value="integrals"><span>Integrals</span></label>
+          </div>
+        </fieldset>
+        <label class="check"><input type="checkbox" name="ffq-begudaEnriquida" value="si"><span>La beguda vegetal que prenc és enriquida amb calci (i B12/vitamina D)</span></label>
+        <p class="error" hidden></p>
+      </section>
+
+      <!-- HORARIS I ESTIL DE VIDA -->
+      <section class="pas" data-mode="tots" data-titol="Horaris i hàbits" hidden>
+        <h2>Horaris i estil de vida</h2>
+        <p class="ajuda">Serveixen per dir-te a quina hora i amb quin àpat prendre cada suplement.</p>
+        <div class="camps horaris">
+          <label class="camp"><span>Esmorzar</span><input type="time" name="h-esmorzar" value="08:00"></label>
+          <label class="camp"><span>Dinar</span><input type="time" name="h-dinar" value="14:00"></label>
+          <label class="camp"><span>Berenar <small>opcional</small></span><input type="time" name="h-berenar" value=""></label>
+          <label class="camp"><span>Sopar</span><input type="time" name="h-sopar" value="21:00"></label>
+          <label class="camp"><span>Anar a dormir</span><input type="time" name="h-dormir" value="23:30"></label>
+        </div>
+
+        <fieldset>
+          <legend>Quant de temps passes a l'aire lliure amb sol (cara i braços descoberts)?</legend>
+          <div class="opcions vertical">
+            <label class="opcio"><input type="radio" name="sol" value="poc"><span>Menys de 15 minuts al dia</span></label>
+            <label class="opcio"><input type="radio" name="sol" value="moderat" checked><span>15–30 minuts al dia</span></label>
+            <label class="opcio"><input type="radio" name="sol" value="molt"><span>Més de 30 minuts al dia</span></label>
+          </div>
+        </fieldset>
+
+        <div data-nomes="detallat">
+          <fieldset>
+            <legend>Color de pell</legend>
+            <div class="opcions">
+              <label class="opcio"><input type="radio" name="fototip" value="clar"><span>Clara</span></label>
+              <label class="opcio"><input type="radio" name="fototip" value="mitja" checked><span>Mitjana</span></label>
+              <label class="opcio"><input type="radio" name="fototip" value="fosc"><span>Fosca</span></label>
+            </div>
+          </fieldset>
+          <label class="check"><input type="checkbox" name="protector" value="si"><span>Faig servir protector solar gairebé sempre que surto</span></label>
+          <label class="check"><input type="checkbox" name="tabac" value="si"><span>Fumo</span></label>
+        </div>
+
+        <fieldset>
+          <legend>Quantes hores dorms normalment?</legend>
+          <div class="opcions">
+            <label class="opcio"><input type="radio" name="son" value="5"><span>Menys de 6</span></label>
+            <label class="opcio"><input type="radio" name="son" value="6.5"><span>6–7</span></label>
+            <label class="opcio"><input type="radio" name="son" value="8" checked><span>7 o més</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Nivell d'estrès</legend>
+          <div class="opcions">
+            <label class="opcio"><input type="radio" name="estres" value="baix"><span>Baix</span></label>
+            <label class="opcio"><input type="radio" name="estres" value="mitja" checked><span>Mitjà</span></label>
+            <label class="opcio"><input type="radio" name="estres" value="alt"><span>Alt</span></label>
+          </div>
+        </fieldset>
+
+        <label class="check"><input type="checkbox" name="suor" value="si"><span>Sues molt o entrenes sovint amb calor</span></label>
+        <p class="error" hidden></p>
+      </section>
+
+      <!-- SUPLEMENTS ACTUALS -->
+      <section class="pas" data-mode="detallat" data-titol="Què ja prens" hidden>
+        <h2>Suplements que ja prens</h2>
+        <p class="ajuda">Així evitem duplicar-los i et diem si en sobra algun.</p>
+        <div id="actuals"></div>
+        <p class="error" hidden></p>
+      </section>
+
+      <!-- SALUT -->
+      <section class="pas" data-mode="tots" data-titol="Salut" hidden>
+        <h2>Salut i medicació</h2>
+        <p class="ajuda">Algunes condicions i medicaments fan que certs suplements no siguin segurs o s'hagin de prendre separats.</p>
+        <fieldset>
+          <legend>Condicions</legend>
+          <div id="condicions"></div>
+        </fieldset>
+        <fieldset>
+          <legend>Medicació que prens</legend>
+          <div id="medicaments"></div>
+        </fieldset>
+        <p class="error" hidden></p>
+      </section>
+
+      <!-- ANALÍTICA -->
+      <section class="pas" data-mode="detallat" data-titol="Analítica" hidden>
+        <h2>Analítica de sang <small class="opcional">opcional</small></h2>
+        <p class="ajuda">Si en tens una dels darrers 6–12 mesos, posa'n els valors: són la dada més fiable de totes. Deixa en blanc el que no tinguis.</p>
+        <div class="camps dos">
+          <label class="camp"><span>Vitamina D (25-OH) <small>ng/ml</small></span>
+            <input type="number" name="an-vitd" min="3" max="200" step="0.1" inputmode="decimal" placeholder="—"></label>
+          <label class="camp"><span>Ferritina <small>ng/ml</small></span>
+            <input type="number" name="an-ferritina" min="1" max="1500" step="1" inputmode="numeric" placeholder="—"></label>
+          <label class="camp"><span>Hemoglobina <small>g/dl</small></span>
+            <input type="number" name="an-hemoglobina" min="5" max="20" step="0.1" inputmode="decimal" placeholder="—"></label>
+          <label class="camp"><span>Vitamina B12 <small>pg/ml</small></span>
+            <input type="number" name="an-b12" min="50" max="3000" step="1" inputmode="numeric" placeholder="—"></label>
+        </div>
+        <p class="ajuda petit">Si l'informe dona la vitamina D en nmol/L, divideix-la per 2,5. Si la B12 surt en pmol/L, multiplica-la per 1,36.</p>
+        <p class="error" hidden></p>
+      </section>
+
+      <nav class="navegacio">
+        <button type="button" id="enrere" class="boto secundari" hidden>Enrere</button>
+        <button type="submit" id="seguent" class="boto primari">Següent</button>
+      </nav>
+    </form>
+
+    <section id="resultats" hidden aria-live="polite"></section>
+  </main>
+</body>
+</html>
